@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Learning Place] — Little Steps, Big Discoveries</title>
+  <style>
+    :root {
+      --cream: #fffaf2;
+      --pink: #ffe2e7;
+      --blue: #dff2ff;
+      --yellow: #fff0b8;
+      --mint: #dcf5e8;
+      --purple: #eae3ff;
+      --ink: #35415b;
+      --muted: #65718a;
+      --white: #ffffff;
+      --shadow: 0 10px 26px rgba(53, 65, 91, 0.08);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Arial Rounded MT Bold", Arial, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .container { width: min(1100px, calc(100% - 36px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 250, 242, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(53, 65, 91, 0.08);
+    }
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      background: var(--yellow);
+      font-size: 1.45rem;
+      transform: rotate(-5deg);
+    }
+    .menu { display: flex; align-items: center; gap: 8px; }
+    .menu a {
+      text-decoration: none;
+      padding: 10px 15px;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+    .menu a:hover, .menu a:focus-visible { background: var(--blue); color: var(--ink); outline: none; }
+
+    .hero { padding: 66px 0 54px; overflow: hidden; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 42px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: var(--mint);
+      font-size: 0.83rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 650px;
+      margin: 18px 0;
+      font-size: clamp(2.6rem, 6vw, 4.7rem);
+      line-height: 1.03;
+      letter-spacing: -0.065em;
+    }
+    h1 .highlight { color: #e57e8d; }
+    .hero-copy { max-width: 540px; color: var(--muted); font-size: 1.1rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 48px;
+      padding: 12px 20px;
+      border-radius: 15px;
+      text-decoration: none;
+      font-weight: 900;
+      border: 2px solid transparent;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+    .button:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .button-primary { background: var(--ink); color: var(--white); }
+    .button-secondary { background: var(--white); border-color: #e6e3dc; }
+
+    .playground {
+      position: relative;
+      min-height: 340px;
+      display: grid;
+      place-items: center;
+      border-radius: 36px;
+      background: var(--blue);
+      isolation: isolate;
+    }
+    .sun {
+      position: absolute;
+      width: 78px; height: 78px;
+      top: 28px; right: 34px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+    .rainbow {
+      position: absolute;
+      width: 220px; height: 110px;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      border-radius: 120px 120px 0 0;
+      background: #f5b9c8;
+      overflow: hidden;
+    }
+    .rainbow::before {
+      content: "";
+      position: absolute;
+      width: 164px; height: 82px;
+      left: 28px; bottom: 0;
+      border-radius: 100px 100px 0 0;
+      background: #fff0b8;
+    }
+    .rainbow::after {
+      content: "";
+      position: absolute;
+      width: 106px; height: 53px;
+      left: 57px; bottom: 0;
+      border-radius: 70px 70px 0 0;
+      background: var(--blue);
+    }
+    .floating-shape { position: absolute; display: grid; place-items: center; font-size: 3.1rem; }
+    .shape-star { top: 45px; left: 35px; color: #ef9c54; transform: rotate(-12deg); }
+    .shape-circle { top: 112px; right: 25px; width: 64px; height: 64px; border-radius: 50%; background: var(--mint); }
+    .shape-square { top: 125px; left: 65px; width: 55px; height: 55px; border-radius: 14px; background: var(--purple); transform: rotate(12deg); }
+    .book {
+      position: relative;
+      z-index: 1;
+      width: 150px;
+      height: 120px;
+      display: grid;
+      place-items: center;
+      margin-top: 30px;
+      border-radius: 20px 20px 26px 26px;
+      background: var(--white);
+      box-shadow: 0 10px 0 #e6dffb;
+      font-size: 4rem;
+      transform: rotate(-5deg);
+    }
+    .book::after {
+      content: "";
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      width: 2px;
+      height: 70px;
+      background: #e5e8f1;
+    }
+
+    section { padding: 56px 0; scroll-margin-top: 90px; }
+    .section-heading { max-width: 650px; margin: 0 auto 30px; text-align: center; }
+    .section-heading h2 { margin-bottom: 10px; font-size: clamp(2rem, 4vw, 2.8rem); letter-spacing: -0.045em; }
+    .section-heading p { margin-bottom: 0; color: var(--muted); }
+    .about-card {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      align-items: center;
+      gap: 30px;
+      padding: clamp(22px, 4vw, 42px);
+      background: var(--pink);
+      border-radius: var(--radius);
+    }
+    .about-art {
+      min-height: 200px;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      background: var(--yellow);
+      font-size: 5rem;
+    }
+    .about-card h3 { margin-bottom: 10px; font-size: 1.55rem; }
+    .about-card p { margin-bottom: 0; color: #59627a; }
+
+    .subjects-section { background: #f4f0ff; }
+    .subject-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .subject-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+    }
+    .subject-card.math { border-color: #f6dfa0; }
+    .subject-card.english { border-color: #bfe9d1; }
+    .subject-icon {
+      display: grid;
+      place-items: center;
+      width: 64px; height: 64px;
+      margin-bottom: 18px;
+      border-radius: 20px;
+      font-size: 2rem;
+    }
+    .math .subject-icon { background: var(--yellow); }
+    .english .subject-icon { background: var(--mint); }
+    .subject-card h3 { margin-bottom: 8px; font-size: 1.65rem; }
+    .subject-card p { color: var(--muted); }
+    .topic-list { display: flex; flex-wrap: wrap; gap: 9px; padding: 0; margin: 18px 0 0; list-style: none; }
+    .topic-list li { padding: 7px 11px; border-radius: 999px; background: #f5f5f8; font-size: 0.88rem; font-weight: 800; }
+
+    .lessons-section { background: #fffaf2; }
+    .lesson-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .lesson-card { background: var(--white); border: 2px solid #e6e3dc; border-radius: var(--radius); padding: 23px; box-shadow: var(--shadow); }
+    .lesson-card h3 { margin-bottom: 8px; font-size: 1.35rem; }
+    .lesson-card p { color: var(--muted); margin-bottom: 14px; }
+    .lesson-example { padding: 13px 15px; background: #f5f5f8; border-radius: 14px; margin: 12px 0; }
+    .lesson-example strong { display: block; margin-bottom: 3px; }
+    .lesson-toggle { border: 0; background: var(--ink); color: white; border-radius: 13px; padding: 11px 15px; font: inherit; font-weight: 800; cursor: pointer; }
+    .lesson-toggle:hover { opacity: .9; }
+    .lesson-detail { margin-top: 14px; padding-top: 13px; border-top: 1px solid #eeeaf2; }
+    .lesson-detail[hidden] { display: none; }
+    .progress-section { background: #f4f0ff; }
+    .progress-card { max-width: 850px; margin: 0 auto; padding: clamp(22px, 4vw, 34px); background: white; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .progress-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .progress-top h3 { margin: 0; font-size: 1.4rem; }
+    .progress-track { height: 14px; margin: 16px 0 8px; overflow: hidden; background: #eeedf3; border-radius: 999px; }
+    .progress-fill { width: 0%; height: 100%; background: #87cfa7; border-radius: inherit; transition: width 180ms ease; }
+    .progress-caption { color: var(--muted); font-size: .92rem; }
+    .badge-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 0; padding: 0; list-style: none; }
+    .reward-badge { padding: 9px 13px; border-radius: 999px; background: #f2f1f5; color: #85899a; font-weight: 800; font-size: .9rem; }
+    .reward-badge.earned { background: var(--yellow); color: var(--ink); }
+    .reset-progress { margin-top: 18px; border: 2px solid #e6e3dc; background: white; color: var(--ink); border-radius: 12px; padding: 9px 13px; font: inherit; font-weight: 800; cursor: pointer; }
+    .quiz-section { background: var(--cream); }
+    .quiz-card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(22px, 4vw, 34px);
+      background: var(--white);
+      border: 2px solid #e6e3dc;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .quiz-topline { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; font-weight: 800; }
+    .quiz-question { margin: 18px 0; font-size: clamp(1.25rem, 3vw, 1.7rem); line-height: 1.3; }
+    .quiz-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .quiz-option {
+      min-height: 52px; padding: 12px 14px; border: 2px solid #e6e3dc; border-radius: 15px;
+      background: #fffdf9; color: var(--ink); font: inherit; font-weight: 800; cursor: pointer; text-align: left;
+    }
+    .quiz-option:hover:not(:disabled) { background: var(--blue); border-color: #b7def4; }
+    .quiz-option:focus-visible { outline: 3px solid #e57e8d; outline-offset: 3px; }
+    .quiz-option:disabled { cursor: default; opacity: .9; }
+    .quiz-option.correct { background: var(--mint); border-color: #8dd4ad; }
+    .quiz-option.incorrect { background: var(--pink); border-color: #f1a7b4; }
+    .quiz-feedback { min-height: 28px; margin: 16px 0 10px; font-weight: 800; }
+    .quiz-controls { display: flex; flex-wrap: wrap; gap: 10px; }
+    .quiz-controls button { cursor: pointer; font: inherit; }
+    .quiz-controls button:disabled { opacity: .5; cursor: not-allowed; }
+    .quiz-note { color: var(--muted); font-size: .88rem; margin: 14px 0 0; }
+    .closing { padding: 58px 0; text-align: center; }
+    .closing-card { padding: 38px 22px; border-radius: 30px; background: var(--mint); }
+    .closing-card h2 { margin-bottom: 10px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .closing-card p { color: var(--muted); margin-bottom: 20px; }
+    footer { padding: 24px 0; border-top: 1px solid #ece7df; color: var(--muted); font-size: 0.9rem; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+    :focus-visible { outline: 3px solid #e57e8d; outline-offset: 3px; }
+
+    @media (max-width: 760px) {
+      .nav { min-height: 68px; flex-wrap: wrap; padding: 12px 0; }
+      .brand { font-size: 1rem; }
+      .menu { width: 100%; justify-content: space-between; gap: 4px; }
+      .menu a { padding: 8px 11px; font-size: 0.9rem; }
+      .hero { padding: 42px 0 34px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+      .hero-copy { font-size: 1rem; }
+      .playground { min-height: 280px; }
+      .shape-star { top: 30px; left: 25px; }
+      .shape-square { left: 38px; }
+      .shape-circle { right: 20px; }
+      section { padding: 42px 0; }
+      .about-card { grid-template-columns: 1fr; gap: 20px; }
+      .about-art { min-height: 150px; font-size: 4rem; }
+      .lesson-grid { grid-template-columns: 1fr; }
+      .quiz-options { grid-template-columns: 1fr; }
+      .subject-grid { grid-template-columns: 1fr; }
+      .subject-card { padding: 23px; }
+    }
+    @media (max-width: 380px) {
+      .container { width: min(100% - 24px, 1100px); }
+      .menu a { padding: 7px 8px; font-size: 0.84rem; }
+      .hero-actions .button { width: 100%; }
+      .playground { min-height: 245px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container nav" aria-label="Main menu">
+      <a class="brand" href="#home" aria-label="[Learning Place] home">
+        <span class="brand-mark" aria-hidden="true">✦</span>
+        <span>[Learning Place]</span>
+      </a>
+      <div class="menu">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#subjects">Subjects</a>
+        <a href="#lessons">Lessons</a>
+        <a href="#quiz">Quiz</a>
+        <a href="#progress">Rewards</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">🌈 Learn a little every day</span>
+          <h1>Little steps.<br> <span class="highlight">Big discoveries!</span></h1>
+          <p class="hero-copy">Welcome to a happy place where curious kids can explore numbers, words, shapes, and stories—one fun lesson at a time.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#subjects">Explore subjects ✨</a>
+            <a class="button button-secondary" href="#about">Meet our learning space</a>
+          </div>
+        </div>
+        <div class="playground" aria-label="Colorful illustration of a book, rainbow, sun, star, and shapes">
+          <div class="sun" aria-hidden="true"></div>
+          <div class="floating-shape shape-star" aria-hidden="true">★</div>
+          <div class="floating-shape shape-circle" aria-hidden="true"></div>
+          <div class="floating-shape shape-square" aria-hidden="true"></div>
+          <div class="book" aria-hidden="true">📖</div>
+          <div class="rainbow" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Learning should feel like play!</h2>
+          <p>A friendly space to ask questions, try new things, and celebrate every little win.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-art" aria-hidden="true">🧩</div>
+          <div>
+            <h3>Hi, little explorer!</h3>
+            <p>[Write a short introduction about your learning website here.] We make learning feel welcoming with simple topics, cheerful colors, and ideas that help young learners grow their skills and confidence at their own pace.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="subjects-section" id="subjects">
+      <div class="container">
+        <div class="section-heading">
+          <h2>What shall we learn today?</h2>
+          <p>Pick a subject and get ready to discover something new.</p>
+        </div>
+        <div class="subject-grid">
+          <article class="subject-card math">
+            <div class="subject-icon" aria-hidden="true">🔢</div>
+            <h3>Math</h3>
+            <p>Count, spot patterns, and discover how numbers and shapes fit into our world.</p>
+            <ul class="topic-list" aria-label="Math topics">
+              <li>Numbers</li>
+              <li>Shapes</li>
+              <li>Counting</li>
+              <li>Patterns</li>
+              <li>Simple addition</li>
+            </ul>
+          </article>
+          <article class="subject-card english">
+            <div class="subject-icon" aria-hidden="true">📚</div>
+            <h3>English</h3>
+            <p>Build word skills and learn how to put words together to share your ideas.</p>
+            <ul class="topic-list" aria-label="English topics">
+              <li>Sentence structures</li>
+              <li>Adverbs</li>
+              <li>Verbs</li>
+              <li>Types of nouns</li>
+              <li>Vocabulary</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="lessons-section" id="lessons">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Mini-lessons for curious minds</h2>
+          <p>Choose a topic to see a simple explanation and an example.</p>
+        </div>
+        <div class="lesson-grid">
+          <article class="lesson-card">
+            <h3>🔺 Math: Shapes</h3>
+            <p>Shapes are all around us. Look at the things near you and see what shapes you can spot.</p>
+            <div class="lesson-example"><strong>Remember:</strong> A triangle has 3 sides. A square has 4 equal sides.</div>
+            <button class="lesson-toggle" type="button" aria-expanded="false" aria-controls="lesson-shapes">Try a tiny challenge</button>
+            <div class="lesson-detail" id="lesson-shapes" hidden>
+              <strong>Can you find a circle?</strong>
+              <p>A clock face or a wheel may look like a circle. Look around your room!</p>
+            </div>
+          </article>
+          <article class="lesson-card">
+            <h3>➕ Math: Numbers</h3>
+            <p>Numbers help us count toys, snacks, books, and so much more.</p>
+            <div class="lesson-example"><strong>Example:</strong> 2 apples + 1 apple = 3 apples.</div>
+            <button class="lesson-toggle" type="button" aria-expanded="false" aria-controls="lesson-numbers">Try a tiny challenge</button>
+            <div class="lesson-detail" id="lesson-numbers" hidden>
+              <strong>You have 3 blocks and get 2 more. How many now?</strong>
+              <p>Count 3, then 4, 5. You have 5 blocks!</p>
+            </div>
+          </article>
+          <article class="lesson-card">
+            <h3>✍️ English: Verbs</h3>
+            <p>A verb is a word that can tell what someone or something does.</p>
+            <div class="lesson-example"><strong>Examples:</strong> jump, read, draw, laugh.</div>
+            <button class="lesson-toggle" type="button" aria-expanded="false" aria-controls="lesson-verbs">Try a tiny challenge</button>
+            <div class="lesson-detail" id="lesson-verbs" hidden>
+              <strong>Find the verb: “The rabbit hops.”</strong>
+              <p>“Hops” is the verb because it tells what the rabbit does.</p>
+            </div>
+          </article>
+          <article class="lesson-card">
+            <h3>📚 English: Nouns</h3>
+            <p>A noun names a person, place, animal, or thing.</p>
+            <div class="lesson-example"><strong>Examples:</strong> teacher, park, kitten, pencil.</div>
+            <button class="lesson-toggle" type="button" aria-expanded="false" aria-controls="lesson-nouns">Try a tiny challenge</button>
+            <div class="lesson-detail" id="lesson-nouns" hidden>
+              <strong>Which word is a noun: “happy” or “flower”?</strong>
+              <p>“Flower” is a noun because it names a thing that grows.</p>
+            </div>
+          </article>
+          <article class="lesson-card">
+            <h3>💨 English: Adverbs</h3>
+            <p>An adverb can tell us more about an action, such as how it happens.</p>
+            <div class="lesson-example"><strong>Example:</strong> “The turtle walks slowly.” Slowly tells how it walks.</div>
+            <button class="lesson-toggle" type="button" aria-expanded="false" aria-controls="lesson-adverbs">Try a tiny challenge</button>
+            <div class="lesson-detail" id="lesson-adverbs" hidden>
+              <strong>Which word tells how Mia sings?</strong>
+              <p>In “Mia sings sweetly,” the word “sweetly” tells how she sings.</p>
+            </div>
+          </article>
+          <article class="lesson-card">
+            <h3>🧩 English: Sentences</h3>
+            <p>A sentence shares a complete thought. Word order helps the sentence make sense.</p>
+            <div class="lesson-example"><strong>Example:</strong> “The little dog runs.”</div>
+            <button class="lesson-toggle" type="button" aria-expanded="false" aria-controls="lesson-sentences">Try a tiny challenge</button>
+            <div class="lesson-detail" id="lesson-sentences" hidden>
+              <strong>Which sounds right: “Birds can fly” or “Fly can birds”?</strong>
+              <p>“Birds can fly” is the usual word order for this sentence.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="quiz-section" id="quiz">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Let’s try a mini quiz!</h2>
+          <p>Choose an answer, see how you did, and keep learning. No account needed.</p>
+        </div>
+        <div class="quiz-card" aria-labelledby="quiz-question" aria-describedby="quiz-feedback">
+          <div class="quiz-topline">
+            <span id="quiz-subject">Math</span>
+            <span id="quiz-progress">Question 1 of 4</span>
+            <span id="quiz-score">Stars: 0</span>
+          </div>
+          <h3 class="quiz-question" id="quiz-question">Which shape has three sides?</h3>
+          <div class="quiz-options" id="quiz-options">
+            <button class="quiz-option" type="button" data-answer="0">Circle</button>
+            <button class="quiz-option" type="button" data-answer="1">Triangle</button>
+            <button class="quiz-option" type="button" data-answer="2">Square</button>
+            <button class="quiz-option" type="button" data-answer="3">Rectangle</button>
+          </div>
+          <p class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite">Pick the answer you think is right!</p>
+          <div class="quiz-controls">
+            <button class="button button-primary" id="quiz-next" type="button" disabled>Next question →</button>
+            <button class="button button-secondary" id="quiz-restart" type="button">Start again</button>
+          </div>
+          <p class="quiz-note">A grown-up can help you read the questions. Your score stays on this page and is not saved.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="progress-section" id="progress">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Your learning garden 🌱</h2>
+          <p>Each finished quiz grows your progress. This is only kept while the page is open.</p>
+        </div>
+        <div class="progress-card">
+          <div class="progress-top">
+            <h3 id="progress-title">Your first steps</h3>
+            <strong id="progress-count">0 of 4 questions answered</strong>
+          </div>
+          <div class="progress-track" role="progressbar" aria-label="Quiz completion progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <p class="progress-caption" id="progress-message">Try the mini quiz to earn your first star badge!</p>
+          <ul class="badge-list" aria-label="Learning badges">
+            <li class="reward-badge" id="badge-first">⭐ First Try</li>
+            <li class="reward-badge" id="badge-math">🔢 Math Explorer</li>
+            <li class="reward-badge" id="badge-english">📚 Word Wizard</li>
+            <li class="reward-badge" id="badge-finish">🏆 Quiz Finisher</li>
+          </ul>
+          <button class="reset-progress" id="reset-progress" type="button">Reset rewards</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing">
+      <div class="container">
+        <div class="closing-card">
+          <h2>Ready for your next little discovery?</h2>
+          <p>Every big idea starts with one small question.</p>
+          <a class="button button-primary" href="#subjects">Let’s learn! 🚀</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>© [Year] [Learning Place]</span>
+      <span>Made for curious minds ✨</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+      const questions = [
+        {
+          subject: "Math",
+          question: "Which shape has three sides?",
+          options: ["Circle", "Triangle", "Square", "Rectangle"],
+          answer: 1,
+          explanation: "A triangle has three sides. Great shape spotting!"
+        },
+        {
+          subject: "Math",
+          question: "What is 2 + 3?",
+          options: ["4", "5", "6", "7"],
+          answer: 1,
+          explanation: "2 plus 3 equals 5. You can count it on your fingers!"
+        },
+        {
+          subject: "English",
+          question: "Which word is a verb?",
+          options: ["Jump", "Blue", "Pencil", "Soft"],
+          answer: 0,
+          explanation: "A verb can show an action. Jump is an action word!"
+        },
+        {
+          subject: "English",
+          question: "Which word is a noun?",
+          options: ["Quickly", "Sing", "Garden", "Happy"],
+          answer: 2,
+          explanation: "A garden is a place, and place names are nouns."
+        }
+      ];
+
+      const subject = document.getElementById("quiz-subject");
+      const progress = document.getElementById("quiz-progress");
+      const scoreLabel = document.getElementById("quiz-score");
+      const questionLabel = document.getElementById("quiz-question");
+      const optionsBox = document.getElementById("quiz-options");
+      const feedback = document.getElementById("quiz-feedback");
+      const nextButton = document.getElementById("quiz-next");
+      const restartButton = document.getElementById("quiz-restart");
+
+      if (!subject || !progress || !scoreLabel || !questionLabel || !optionsBox || !feedback || !nextButton || !restartButton) {
+        return;
+      }
+
+      let current = 0;
+      let score = 0;
+      let answered = false;
+      let finished = false;
+      let answeredCount = 0;
+      let mathCorrect = false;
+      let englishCorrect = false;
+
+      const progressCount = document.getElementById("progress-count");
+      const progressTitle = document.getElementById("progress-title");
+      const progressMessage = document.getElementById("progress-message");
+      const progressBar = document.getElementById("progress-bar");
+      const progressFill = document.getElementById("progress-fill");
+      const badgeFirst = document.getElementById("badge-first");
+      const badgeMath = document.getElementById("badge-math");
+      const badgeEnglish = document.getElementById("badge-english");
+      const badgeFinish = document.getElementById("badge-finish");
+      const resetProgress = document.getElementById("reset-progress");
+
+      function updateProgress() {
+        const percentage = (answeredCount / questions.length) * 100;
+        if (progressCount) progressCount.textContent = answeredCount + " of " + questions.length + " questions answered";
+        if (progressBar) progressBar.setAttribute("aria-valuenow", String(answeredCount));
+        if (progressFill) progressFill.style.width = percentage + "%";
+        if (progressTitle) progressTitle.textContent = answeredCount === questions.length ? "Quiz garden grown!" : answeredCount > 0 ? "Look how you’re growing!" : "Your first steps";
+        if (progressMessage) progressMessage.textContent = answeredCount === questions.length
+          ? "You finished the quiz. Brilliant effort!"
+          : answeredCount > 0 ? "Keep going to unlock more learning badges." : "Try the mini quiz to earn your first star badge!";
+        if (badgeFirst) badgeFirst.classList.toggle("earned", answeredCount >= 1);
+        if (badgeMath) badgeMath.classList.toggle("earned", mathCorrect);
+        if (badgeEnglish) badgeEnglish.classList.toggle("earned", englishCorrect);
+        if (badgeFinish) badgeFinish.classList.toggle("earned", finished);
+      }
+
+      function renderQuestion() {
+        const item = questions[current];
+        answered = false;
+        finished = false;
+        subject.textContent = item.subject;
+        progress.textContent = "Question " + (current + 1) + " of " + questions.length;
+        scoreLabel.textContent = "Stars: " + score;
+        questionLabel.textContent = item.question;
+        feedback.textContent = "Pick the answer you think is right!";
+        nextButton.disabled = true;
+        nextButton.textContent = current === questions.length - 1 ? "See my result →" : "Next question →";
+        optionsBox.replaceChildren();
+
+        item.options.forEach(function (option, index) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "quiz-option";
+          button.textContent = option;
+          button.addEventListener("click", function () { chooseAnswer(index, button); });
+          optionsBox.appendChild(button);
+        });
+      }
+
+      function chooseAnswer(selected, selectedButton) {
+        if (answered || finished) return;
+        answered = true;
+        answeredCount += 1;
+        const item = questions[current];
+        const buttons = optionsBox.querySelectorAll("button");
+        buttons.forEach(function (button, index) {
+          button.disabled = true;
+          if (index === item.answer) button.classList.add("correct");
+        });
+
+        if (selected === item.answer) {
+          score += 1;
+          if (item.subject === "Math") mathCorrect = true;
+          if (item.subject === "English") englishCorrect = true;
+          selectedButton.classList.add("correct");
+          feedback.textContent = "⭐ Correct! " + item.explanation;
+        } else {
+          selectedButton.classList.add("incorrect");
+          feedback.textContent = "Good try! " + item.explanation;
+        }
+        scoreLabel.textContent = "Stars: " + score;
+        nextButton.disabled = false;
+        updateProgress();
+      }
+
+      function showResult() {
+        finished = true;
+        subject.textContent = "Quiz complete!";
+        progress.textContent = "Finished";
+        questionLabel.textContent = "You earned " + score + " out of " + questions.length + " stars!";
+        optionsBox.replaceChildren();
+        feedback.textContent = score === questions.length
+          ? "Amazing work! You got every question right!"
+          : "Nice effort! Every try helps your brain grow. Start again to practise.";
+        nextButton.disabled = true;
+        nextButton.textContent = "All done!";
+        updateProgress();
+      }
+
+      nextButton.addEventListener("click", function () {
+        if (!answered || finished) return;
+        if (current < questions.length - 1) {
+          current += 1;
+          renderQuestion();
+        } else {
+          showResult();
+        }
+      });
+
+      restartButton.addEventListener("click", function () {
+        current = 0;
+        score = 0;
+        answeredCount = 0;
+        mathCorrect = false;
+        englishCorrect = false;
+        renderQuestion();
+        updateProgress();
+      });
+
+      if (resetProgress) {
+        resetProgress.addEventListener("click", function () {
+          current = 0;
+          score = 0;
+          answeredCount = 0;
+          mathCorrect = false;
+          englishCorrect = false;
+          renderQuestion();
+          updateProgress();
+          const progressSection = document.getElementById("progress");
+          if (progressSection) progressSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+
+      renderQuestion();
+      updateProgress();
+
+
+      document.querySelectorAll(".lesson-toggle").forEach(function (button) {
+        button.addEventListener("click", function () {
+          const targetId = button.getAttribute("aria-controls");
+          const detail = document.getElementById(targetId);
+          if (!detail) return;
+          const willOpen = detail.hidden;
+          detail.hidden = !willOpen;
+          button.setAttribute("aria-expanded", String(willOpen));
+          button.textContent = willOpen ? "Hide challenge" : "Try a tiny challenge";
+        });
+      });
+
+    }());
+  </script>
+
+</body>
+</html>
